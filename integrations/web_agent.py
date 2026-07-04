@@ -165,23 +165,35 @@ class WebAgent:
         
         # Try remote_web_search (Kiro's built-in search) if available
         # This is only available when running directly in Kiro CLI context
-        try:
-            import remote_web_search
-            search_results = remote_web_search(query=query)
-            results = [
-                {
-                    "title": r.get("title", ""),
-                    "url": r.get("url", ""),
-                    "snippet": r.get("snippet", ""),
-                    "source": "web_search",
-                }
-                for r in search_results[:max_results]
-            ]
-            if results:
-                return results
-        except (ImportError, NameError):
-            # Not running in Kiro CLI context, continue with fallbacks
-            pass
+        # remote_web_search is a Kiro CLI tool, not a Python module
+        # We check for its availability via environment
+        kiro_mode = os.environ.get("KIRO_CLI_MODE") == "true"
+        if kiro_mode:
+            try:
+                # In Kiro CLI mode, use subprocess to call remote_web_search
+                import subprocess
+                import json
+                result = subprocess.run(
+                    ["kiro", "web-search", query],
+                    capture_output=True,
+                    text=True,
+                    timeout=30,
+                )
+                if result.returncode == 0:
+                    search_results = json.loads(result.stdout)
+                    results = [
+                        {
+                            "title": r.get("title", ""),
+                            "url": r.get("url", ""),
+                            "snippet": r.get("snippet", ""),
+                            "source": "web_search",
+                        }
+                        for r in search_results[:max_results]
+                    ]
+                    if results:
+                        return results
+            except Exception:
+                pass
         
         # Try Bing Web Search API (if API key available)
         bing_key = os.environ.get("BING_API_KEY")

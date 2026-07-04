@@ -58,19 +58,19 @@ except ImportError:
     HAS_COLOR = False
     # Fallback colors
     class Fore:
-        RED = '\033[91m'
-        GREEN = '\033[92m'
-        YELLOW = '\033[93m'
-        BLUE = '\033[94m'
-        MAGENTA = '\033[95m'
-        CYAN = '\033[96m'
-        WHITE = '\033[97m'
-        RESET = '\033[0m'
+        RED: str = '\033[91m'
+        GREEN: str = '\033[92m'
+        YELLOW: str = '\033[93m'
+        BLUE: str = '\033[94m'
+        MAGENTA: str = '\033[95m'
+        CYAN: str = '\033[96m'
+        WHITE: str = '\033[97m'
+        RESET: str = '\033[0m'
     
     class Style:
-        BRIGHT = '\033[1m'
-        DIM = '\033[2m'
-        RESET_ALL = '\033[0m'
+        BRIGHT: str = '\033[1m'
+        DIM: str = '\033[2m'
+        RESET_ALL: str = '\033[0m'
 
 
 class AgentGUI:
@@ -101,7 +101,7 @@ class AgentGUI:
         self.max_output_length = 4000
         
         # Session management (for prompt_toolkit)
-        self.session: Optional[PromptSession] = None
+        self.session: Optional[Any] = None  # type: ignore
         
         self.history = []
         self.running = True

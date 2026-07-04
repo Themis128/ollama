@@ -48,12 +48,14 @@ Usage:
     result = storm.storm(task="Build user management", prompt="...")
 """
 
+from typing import NoReturn
+
 # Try to import deepagents modules, fall back to alternatives if not available
 try:
     from .deepagents_ollama import create_ollama_agent
 except (ImportError, ModuleNotFoundError):
     # Create fallback if deepagents is not installed
-    def create_ollama_agent(*args, **kwargs):
+    def create_ollama_agent(*args, **kwargs) -> NoReturn:
         raise ImportError(
             "deepagents package is not installed. "
             "Install with: pip install deepagents"
@@ -67,31 +69,31 @@ try:
     from .cloudless_gr_integration import write_cloudflare_mcp_config
 except (ImportError, ModuleNotFoundError):
     # Create fallback if deepagents is not installed
-    def create_cloudless_agent(*args, **kwargs):
+    def create_cloudless_agent(*args, **kwargs) -> NoReturn:
         raise ImportError(
             "deepagents package is not installed. "
             "Install with: pip install deepagents"
         )
 
-    def create_cloudflare_agent(*args, **kwargs):
+    def create_cloudflare_agent(*args, **kwargs) -> NoReturn:
         raise ImportError(
             "deepagents package is not installed. "
             "Install with: pip install deepagents"
         )
 
-    def get_cloudflare_skills(*args, **kwargs):
+    def get_cloudflare_skills(*args, **kwargs) -> NoReturn:
         raise ImportError(
             "deepagents package is not installed. "
             "Install with: pip install deepagents"
         )
 
-    def get_cloudflare_mcp_servers(*args, **kwargs):
+    def get_cloudflare_mcp_servers(*args, **kwargs) -> NoReturn:
         raise ImportError(
             "deepagents package is not installed. "
             "Install with: pip install deepagents"
         )
 
-    def write_cloudflare_mcp_config(*args, **kwargs):
+    def write_cloudflare_mcp_config(*args, **kwargs) -> NoReturn:
         raise ImportError(
             "deepagents package is not installed. "
             "Install with: pip install deepagents"

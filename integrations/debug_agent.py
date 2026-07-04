@@ -339,7 +339,8 @@ Fix the implementation to resolve the error. Return ONLY the corrected code."""
             base_url=self.config.base_url,
         )
         response = llm.invoke(prompt)
-        return response.content
+        content = response.content if isinstance(response.content, str) else ""
+        return content
     
     def get_analysis_history(self) -> List[Dict[str, Any]]:
         """Get analysis history."""

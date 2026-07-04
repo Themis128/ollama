@@ -147,7 +147,8 @@ Do NOT implement the feature - only write the test.
 Return ONLY the test code with no explanation."""
         
         response = self.llm.invoke(prompt)
-        return response.content
+        content = response.content if isinstance(response.content, str) else ""
+        return content
     
     def _write_implementation(
         self,
@@ -173,7 +174,8 @@ Do NOT add extra functionality - implement only what's tested.
 Return ONLY the implementation code with no explanation."""
         
         response = self.llm.invoke(prompt)
-        return response.content
+        content = response.content if isinstance(response.content, str) else ""
+        return content
     
     def _self_correct(
         self,
@@ -219,7 +221,8 @@ Fix the implementation to make tests pass:
 4. Return ONLY the corrected implementation code"""
             
             response = self.llm.invoke(fix_prompt)
-            self._write_file(implementation_file, response.content)
+            content = response.content if isinstance(response.content, str) else ""
+            self._write_file(implementation_file, content)
             
             # Run test again
             if self._run_test(test_command):

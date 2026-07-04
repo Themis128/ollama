@@ -171,7 +171,6 @@ Always explain your approach before implementing."""
     llm_model = ChatOllama(
         model=model,
         temperature=temperature,
-        max_tokens=max_tokens,
         base_url=base_url,
     )
 
@@ -307,7 +306,6 @@ Backend: Ollama @ {base_url}
     llm_model = ChatOllama(
         model=model,
         temperature=temperature,
-        max_tokens=max_tokens,
         base_url=base_url,
     )
 

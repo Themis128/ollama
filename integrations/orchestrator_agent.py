@@ -256,7 +256,7 @@ Please execute the task using this mode's responsibilities."""
     
     def get_mode_history(self) -> List[str]:
         """Get list of modes used in current session."""
-        return [entry.get("mode") for entry in self.history]
+        return [entry["mode"] for entry in self.history if entry.get("mode")]
 
 
 # CLI Interface
