@@ -39,6 +39,11 @@ jobs:
       run: |
         pip install pytest
 
+    - name: Install pnpm (for tests)
+      uses: pnpm/action-setup@v4
+      with:
+        version: 9
+    
     - name: Test
       run: |
         python -m pytest --no-cov -v tests/ || echo "No tests found"
