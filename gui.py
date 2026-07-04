@@ -347,6 +347,17 @@ class AgentGUI:
         print(f"{Fore.CYAN}║{Style.RESET_ALL}   • Find documentation for [API/library]")
         print(f"{Fore.CYAN}║{Style.RESET_ALL}   • Search for [query]")
         
+        # Cloudflare Skills
+        print(f"{Fore.CYAN}║{Style.RESET_ALL} {Fore.YELLOW}Cloudflare Skills{Style.RESET_ALL}")
+        print(f"{Fore.CYAN}║{Style.RESET_ALL}   • Review code quality using Cloudflare skills")
+        print(f"{Fore.CYAN}║{Style.RESET_ALL}   • Analyze database queries with Cloudflare skills")
+        print(f"{Fore.CYAN}║{Style.RESET_ALL}   • Review security with Cloudflare skills")
+        print(f"{Fore.CYAN}║{Style.RESET_ALL}   • Get deployment guidance with Cloudflare skills")
+        print(f"{Fore.CYAN}║{Style.RESET_ALL}   • Check monitoring with Cloudflare skills")
+        print(f"{Fore.CYAN}║{Style.RESET_ALL}   • Review performance with Cloudflare skills")
+        print(f"{Fore.CYAN}║{Style.RESET_ALL}   • Run tests with Cloudflare skills")
+        print(f"{Fore.CYAN}║{Style.RESET_ALL}   • Review git workflow with Cloudflare skills")
+        
         # Ollama management
         print(f"{Fore.CYAN}║{Style.RESET_ALL} {Fore.YELLOW}Ollama Management{Style.RESET_ALL}")
         print(f"{Fore.CYAN}║{Style.RESET_ALL}   • start ollama | stop ollama | check ollama")
