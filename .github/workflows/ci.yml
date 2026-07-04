@@ -35,6 +35,10 @@ jobs:
         pip install ruff
         ruff check . || true
     
+    - name: Install test dependencies
+      run: |
+        pip install pytest
+
     - name: Test
       run: |
         python -m pytest --no-cov -v tests/ || echo "No tests found"
