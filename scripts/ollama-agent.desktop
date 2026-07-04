@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Ollama Agent Terminal
+Comment=Launch the DeepAgents + Ollama terminal helper
+Exec=sh -c 'SCRIPT_DIR="$(cd "$(dirname "$1")" && pwd)"; cd "$SCRIPT_DIR/.." 2>/dev/null || true; "$SCRIPT_DIR/ollama-agent.sh"'
+Path=/home/tbaltzakis/ollama
+Terminal=true
+Type=Application
+Categories=Utility;Development;
+StartupNotify=true
+Icon=utilities-terminal

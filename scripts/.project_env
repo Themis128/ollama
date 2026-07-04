@@ -1,0 +1,7 @@
+#!/bin/bash
+# Auto-generated project environment
+# Generated on: Fri Jul  3 10:41:51 PM EEST 2026
+export PROJECT_NAME="cloudless.gr"
+export PROJECT_PATH="/home/tbaltzakis/cloudless.gr"
+export PROJECT_TYPE="React"
+export DEEP_AGENTS_PROJECT_ROOT="/home/tbaltzakis/cloudless.gr"

@@ -1,0 +1,10 @@
+# Core runtime dependencies required by integrations/ and gui.py
+deepagents
+langchain-ollama
+langchain-core
+requests
+httpx
+
+# Optional: used by gui.py for the modern terminal UI
+prompt_toolkit
+colorama
