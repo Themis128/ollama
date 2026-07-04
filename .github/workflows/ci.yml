@@ -54,9 +54,6 @@ jobs:
       with:
         python-version: '3.11'
     
-    - name: Install ruff
-      run: pip install ruff
-    
     - name: Lint Python
       run: |
         pip install ruff
