@@ -26,13 +26,14 @@ from typing import Dict, Any, List, Optional
 
 # Try to import prompt_toolkit for modern UI
 try:
-    from prompt_toolkit import PromptSession
-    from prompt_toolkit.completion import WordCompleter
-    from prompt_toolkit.styles import Style as PTStyle
-    from prompt_toolkit.formatted_text import HTML
-    HAS_PROMPT_TOOLKIT = True
+    import importlib.util
+
+    HAS_PROMPT_TOOLKIT = importlib.util.find_spec("prompt_toolkit") is not None
 except ImportError:
     HAS_PROMPT_TOOLKIT = False
+
+if HAS_PROMPT_TOOLKIT:
+    from prompt_toolkit import PromptSession
 
 # Add parent directory to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -49,7 +50,8 @@ from integrations import (
 
 # Try to import colorama for cross-platform colors
 try:
-    from colorama import init, Fore, Back, Style
+    from colorama import init, Fore, Style
+
     init()
     HAS_COLOR = True
 except ImportError:

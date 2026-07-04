@@ -25,6 +25,7 @@ import os
 import json
 from typing import Optional, Dict, Any, List
 from dataclasses import dataclass
+from pathlib import Path
 
 # DeepAgents imports
 from deepagents import create_deep_agent
@@ -188,18 +189,9 @@ Always explain your approach before implementing."""
 
     return agent
 
-
 # =============================================================================
 # Utility Functions
 # =============================================================================
-
-def get_cloudless_skills() -> List[str]:
-    """Get list of available skills from cloudless.gr."""
-    skills_dir = "/home/tbaltzakis/cloudless.gr/.deepagents/skills"
-    if os.path.exists(skills_dir):
-        return [d for d in os.listdir(skills_dir) if os.path.isdir(os.path.join(skills_dir, d))]
-    return []
-
 
 def list_mcp_servers() -> List[str]:
     """List all available MCP servers in cloudless.gr."""
@@ -208,19 +200,6 @@ def list_mcp_servers() -> List[str]:
         with open(mcp_path) as f:
             config = json.load(f)
         return list(config.get("mcpServers", {}).keys())
-    return []
-
-
-def get_cloudflare_skills(skills_root: Optional[str] = None) -> List[str]:
-    """
-    Get list of available Cloudflare skills from the cloned skills repo.
-
-    Use `scripts/setup-cloudflare-skills.sh` first to populate this directory.
-    """
-    if skills_root is None:
-        skills_root = os.path.join(os.getcwd(), ".deepagents", "skills", "cloudflare")
-    if os.path.exists(skills_root):
-        return [d for d in os.listdir(skills_root) if os.path.isdir(os.path.join(skills_root, d))]
     return []
 
 
