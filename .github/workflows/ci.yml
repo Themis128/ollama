@@ -30,10 +30,10 @@ jobs:
         python -m py_compile scripts/ollama-agent-terminal.py
         for f in integrations/*.py; do python -m py_compile "$f" || exit 1; done
     
-    - name: Lint with ruff (if installed)
+    - name: Lint with ruff
       run: |
         pip install ruff
-        ruff check . || true
+        ruff check .
     
     - name: Install test dependencies
       run: |
@@ -58,7 +58,9 @@ jobs:
       run: pip install ruff
     
     - name: Lint Python
-      run: ruff check .
+      run: |
+        pip install ruff
+        ruff check .
     
     - name: Lint Markdown (skip for now - too many existing errors)
       run: echo "Markdown linting skipped - existing errors require cleanup"
