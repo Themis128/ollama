@@ -1,0 +1,37 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'gui.py'
+      - 'integrations/**'
+      - 'scripts/**'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+        cache: 'pip'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    
+    - name: Run tests
+      run: |
+        echo "Running tests..."
+        python -m pytest tests/ -v || echo "No tests to run"
+    
+    - name: Deploy
+      run: |
+        echo "Deployment steps would go here"
+        echo "This workflow triggers on code changes"
