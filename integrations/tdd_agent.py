@@ -25,11 +25,8 @@ Usage:
     )
 """
 
-import os
-import re
 import subprocess
-import time
-from typing import Optional, Dict, Any, List, Tuple
+from typing import Optional, Dict, Any, List
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -186,7 +183,7 @@ Return ONLY the implementation code with no explanation."""
         test_command: str,
     ) -> Dict[str, Any]:
         """Self-correct until tests pass."""
-        print(f"\n[SELF-CORRECT] Phase: Fixing test failures...")
+        print("\n[SELF-CORRECT] Phase: Fixing test failures...")
         
         for iteration in range(self.config.max_iterations):
             self.iteration_count = iteration + 1

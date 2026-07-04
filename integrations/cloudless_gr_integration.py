@@ -27,7 +27,7 @@ from typing import Optional, Dict, Any, List
 from dataclasses import dataclass
 
 # DeepAgents imports
-from deepagents import create_deep_agent, ProviderProfile, register_provider_profile
+from deepagents import create_deep_agent
 
 # LangChain Ollama integration
 from langchain_ollama import ChatOllama

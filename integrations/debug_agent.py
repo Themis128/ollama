@@ -23,7 +23,6 @@ Usage:
     fix = debugger.generate_fix(error_output, implementation_file)
 """
 
-import os
 import re
 from typing import Optional, Dict, Any, List
 from dataclasses import dataclass
@@ -385,6 +384,6 @@ if __name__ == "__main__":
         print(f"Lines: {analysis['total_lines']}")
         print(f"Summary: {analysis['summary']}")
         if analysis['patterns_detected']:
-            print(f"\nPatterns Detected:")
+            print("\nPatterns Detected:")
             for p in analysis['patterns_detected'][:5]:
                 print(f"  - {p['pattern']}: {p['count']} occurrences")

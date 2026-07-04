@@ -22,12 +22,10 @@ Usage:
         agent.apply_fix(fixed_code)
 """
 
-import os
 import re
 import subprocess
 from typing import Optional, Dict, Any, List
 from dataclasses import dataclass, field
-from pathlib import Path
 from datetime import datetime
 
 

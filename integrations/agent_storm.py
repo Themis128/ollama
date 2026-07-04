@@ -33,10 +33,8 @@ Usage:
     )
 """
 
-import os
-import asyncio
-from typing import Optional, Dict, Any, List, Callable
-from dataclasses import dataclass, field
+from typing import Optional, Dict, Any, List
+from dataclasses import dataclass
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
 
@@ -344,7 +342,7 @@ Provide a well-structured synthesis that integrates all perspectives."""
         start_time = datetime.now()
         
         print(f"\n{'='*60}")
-        print(f"AGENT STORM: Parallel Task Execution")
+        print("AGENT STORM: Parallel Task Execution")
         print(f"{'='*60}\n")
         
         results = []
@@ -423,5 +421,5 @@ if __name__ == "__main__":
     print(f"Task: {result['task']}")
     print(f"Agents: {result['num_agents']}")
     print(f"Duration: {result['duration_seconds']:.2f}s")
-    print(f"\nSynthesis:")
+    print("\nSynthesis:")
     print(result['synthesis']['synthesis'][:2000])

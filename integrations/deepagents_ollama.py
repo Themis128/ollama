@@ -26,7 +26,6 @@ Usage:
     result = agent.invoke({"messages": "Write a Python function to calculate fibonacci"})
 """
 
-import os
 from typing import Optional, Dict, Any, List
 from dataclasses import dataclass
 
@@ -303,7 +302,7 @@ async def test_ollama_connection(
         messages = [HumanMessage(content="Write 'Hello, Ollama!' in Python")]
         response = await test_model.ainvoke(messages)
 
-        print(f"[Test] ✓ Generation test passed")
+        print("[Test] ✓ Generation test passed")
         print(f"[Test] Response: {response.content[:100]}...")
 
     except Exception as e:
@@ -331,7 +330,6 @@ def list_available_models(
         List of model information dictionaries
     """
     import httpx
-    import json
 
     try:
         response = httpx.get(f"{base_url}/api/tags", timeout=10)

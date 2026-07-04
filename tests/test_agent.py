@@ -1,6 +1,5 @@
 """Tests for the agent terminal helper."""
 
-import os
 import subprocess
 import sys
 

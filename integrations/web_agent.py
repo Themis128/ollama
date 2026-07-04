@@ -34,9 +34,9 @@ import os
 import json
 import time
 import hashlib
-from typing import Optional, Dict, Any, List, Tuple
+from typing import Optional, Dict, Any, List
 from dataclasses import dataclass, field
-from urllib.parse import urlparse, urljoin
+from urllib.parse import urlparse
 from pathlib import Path
 import requests
 from requests.adapters import HTTPAdapter, Retry
@@ -294,8 +294,6 @@ class WebAgent:
     
     def _fallback_search(self, query: str, max_results: int) -> List[Dict[str, str]]:
         """Fallback search using remote_web_search."""
-        import subprocess
-        import json
         
         try:
             # Check if we're running in Kiro CLI context

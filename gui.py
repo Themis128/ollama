@@ -45,8 +45,6 @@ from integrations import (
     WebAgent,
     DebugAgent,
     AgentStorm,
-    create_ollama_agent,
-    create_cloudflare_agent,
 )
 
 # Try to import colorama for cross-platform colors
@@ -835,9 +833,9 @@ class AgentGUI:
         
         # Use current project context automatically
         if self.project_path and self.project_path != os.getcwd():
-            context = f"Project: {self.project_name} ({self.project_type})\nPath: {self.project_path}"
+            pass
         else:
-            context = f"Current Directory: {os.getcwd()}"
+            f"Current Directory: {os.getcwd()}"
         
         # Auto-detect the task based on NLP
         command_lower = command.lower()

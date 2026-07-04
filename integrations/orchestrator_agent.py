@@ -26,7 +26,6 @@ Usage:
     )
 """
 
-import os
 import json
 from typing import Optional, Dict, Any, List
 from dataclasses import dataclass
@@ -138,7 +137,6 @@ Focus on understanding and fixing failures.""",
             mode_enum = AgentMode.ARCHITECT
         
         current_mode = mode_enum
-        mode_switches = 0
         
         # Prepare prompt
         system_prompt = self.mode_prompts[current_mode.value]

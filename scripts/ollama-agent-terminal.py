@@ -28,10 +28,8 @@ Usage:
 
 import os
 import sys
-import subprocess
 import argparse
 from pathlib import Path
-from typing import Optional
 
 # Add parent directory to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -123,7 +121,7 @@ def run_interactive(agent, model: str, project_path: str) -> None:
     """Run interactive REPL mode."""
     print()
     print(f"{'=' * 60}")
-    print(f"DeepAgents + Ollama Terminal Helper")
+    print("DeepAgents + Ollama Terminal Helper")
     print(f"{'=' * 60}")
     print(f"Model: {model}")
     print(f"URL: {agent.llm_model.base_url if hasattr(agent, 'llm_model') else 'N/A'}")
@@ -158,10 +156,10 @@ def run_interactive(agent, model: str, project_path: str) -> None:
                 
                 if command == "clear":
                     os.system("clear" if os.name == "posix" else "cls")
-                    print(f"DeepAgents + Ollama Terminal Helper")
+                    print("DeepAgents + Ollama Terminal Helper")
                     print(f"Model: {model}")
                     print(f"Project: {project_path}")
-                    print(f"Type /exit or /quit to leave.")
+                    print("Type /exit or /quit to leave.")
                     print()
                     continue
                 
