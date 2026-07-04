@@ -33,7 +33,7 @@ except ImportError:
     HAS_PROMPT_TOOLKIT = False
 
 if HAS_PROMPT_TOOLKIT:
-    from prompt_toolkit import PromptSession
+    pass  # type: ignore
 
 # Add parent directory to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
