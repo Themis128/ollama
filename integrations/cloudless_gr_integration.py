@@ -28,10 +28,10 @@ from dataclasses import dataclass
 from pathlib import Path
 
 # DeepAgents imports
-from deepagents import create_deep_agent
+from deepagents import create_deep_agent  # type: ignore
 
 # LangChain Ollama integration
-from langchain_ollama import ChatOllama
+from langchain_ollama import ChatOllama  # type: ignore
 
 
 # =============================================================================

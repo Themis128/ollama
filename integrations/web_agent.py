@@ -38,9 +38,9 @@ from typing import Optional, Dict, Any, List
 from dataclasses import dataclass, field
 from urllib.parse import urlparse
 from pathlib import Path
-import requests
-from requests.adapters import HTTPAdapter
-from urllib3.util.retry import Retry
+import requests  # type: ignore
+from requests.adapters import HTTPAdapter  # type: ignore
+from urllib3.util.retry import Retry  # type: ignore
 
 
 @dataclass

@@ -50,7 +50,7 @@ from integrations import (
 
 # Try to import colorama for cross-platform colors
 try:
-    from colorama import init, Fore, Style
+    from colorama import init, Fore, Style  # type: ignore
 
     init()
     HAS_COLOR = True

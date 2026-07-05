@@ -30,11 +30,11 @@ from typing import Optional, Dict, Any, List
 from dataclasses import dataclass
 
 # DeepAgents imports
-from deepagents import create_deep_agent, ProviderProfile, register_provider_profile
+from deepagents import create_deep_agent, ProviderProfile, register_provider_profile  # type: ignore
 
 # LangChain Ollama integration (official recommended approach)
 # pip install -qU langchain-ollama
-from langchain_ollama import ChatOllama
+from langchain_ollama import ChatOllama  # type: ignore
 
 
 # =============================================================================
@@ -265,7 +265,7 @@ async def test_ollama_connection(
     Returns:
         True if connection successful, raises exception otherwise
     """
-    import httpx
+    import httpx  # type: ignore
 
     print(f"[Test] Connecting to Ollama at {base_url}...")
 
@@ -296,7 +296,7 @@ async def test_ollama_connection(
         )
 
         # Simple test invocation
-        from langchain_core.messages import HumanMessage
+        from langchain_core.messages import HumanMessage  # type: ignore
 
         messages = [HumanMessage(content="Write 'Hello, Ollama!' in Python")]
         response = await test_model.ainvoke(messages)
@@ -328,7 +328,7 @@ def list_available_models(
     Returns:
         List of model information dictionaries
     """
-    import httpx
+    import httpx  # type: ignore
 
     try:
         response = httpx.get(f"{base_url}/api/tags", timeout=10)

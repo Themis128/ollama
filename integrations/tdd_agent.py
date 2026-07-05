@@ -30,7 +30,7 @@ from typing import Optional, Dict, Any, List
 from dataclasses import dataclass
 from pathlib import Path
 
-from langchain_ollama import ChatOllama
+from langchain_ollama import ChatOllama  # type: ignore
 
 
 @dataclass

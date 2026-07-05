@@ -31,7 +31,7 @@ from typing import Optional, Dict, Any, List
 from dataclasses import dataclass
 from enum import Enum
 
-from langchain_ollama import ChatOllama
+from langchain_ollama import ChatOllama  # type: ignore
 
 
 class AgentMode(Enum):
