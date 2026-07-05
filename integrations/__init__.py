@@ -48,57 +48,7 @@ Usage:
     result = storm.storm(task="Build user management", prompt="...")
 """
 
-from typing import NoReturn
-
-# Try to import deepagents modules, fall back to alternatives if not available
-try:
-    from .deepagents_ollama import create_ollama_agent
-except (ImportError, ModuleNotFoundError):
-    # Create fallback if deepagents is not installed
-    def create_ollama_agent(*args, **kwargs) -> NoReturn:
-        raise ImportError(
-            "deepagents package is not installed. "
-            "Install with: pip install deepagents"
-        )
-
-try:
-    from .cloudless_gr_integration import create_cloudless_agent
-    from .cloudless_gr_integration import create_cloudflare_agent
-    from .cloudless_gr_integration import get_cloudflare_skills
-    from .cloudless_gr_integration import get_cloudflare_mcp_servers
-    from .cloudless_gr_integration import write_cloudflare_mcp_config
-except (ImportError, ModuleNotFoundError):
-    # Create fallback if deepagents is not installed
-    def create_cloudless_agent(*args, **kwargs) -> NoReturn:
-        raise ImportError(
-            "deepagents package is not installed. "
-            "Install with: pip install deepagents"
-        )
-
-    def create_cloudflare_agent(*args, **kwargs) -> NoReturn:
-        raise ImportError(
-            "deepagents package is not installed. "
-            "Install with: pip install deepagents"
-        )
-
-    def get_cloudflare_skills(*args, **kwargs) -> NoReturn:
-        raise ImportError(
-            "deepagents package is not installed. "
-            "Install with: pip install deepagents"
-        )
-
-    def get_cloudflare_mcp_servers(*args, **kwargs) -> NoReturn:
-        raise ImportError(
-            "deepagents package is not installed. "
-            "Install with: pip install deepagents"
-        )
-
-    def write_cloudflare_mcp_config(*args, **kwargs) -> NoReturn:
-        raise ImportError(
-            "deepagents package is not installed. "
-            "Install with: pip install deepagents"
-        )
-
+from .deepagents_ollama import create_ollama_agent
 from .tdd_agent import TDDAgent
 from .terminal_agent import TerminalAgent
 from .sandbox_agent import SandboxAgent
@@ -106,6 +56,18 @@ from .orchestrator_agent import Orchestrator
 from .web_agent import WebAgent
 from .debug_agent import DebugAgent
 from .agent_storm import AgentStorm, AgentRole
+
+from .cloudless_gr_integration import (
+    create_cloudless_agent,
+    get_cloudflare_skills,
+    get_cloudflare_mcp_servers,
+    write_cloudflare_mcp_config,
+)
+
+# Create cloudflare agent as a wrapper
+def create_cloudflare_agent(*args, **kwargs):
+    """Create a DeepAgent with Cloudflare skills/MCP enabled."""
+    return create_cloudless_agent(*args, **kwargs)
 
 __all__ = [
     "create_ollama_agent",

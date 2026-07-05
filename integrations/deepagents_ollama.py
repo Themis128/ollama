@@ -134,14 +134,13 @@ def get_ollama_model(
         config = DEFAULT_CONFIG
 
     # Use ChatOllama directly - connects to localhost:11434 by default
+    # Note: langchain_ollama.ChatOllama uses num_predict instead of max_tokens
     model = ChatOllama(
         model=config.model,
         temperature=config.temperature,
-        max_tokens=config.max_tokens,
+        num_predict=config.max_tokens,
         top_p=config.top_p,
-        base_url=config.base_url,  # Override default localhost:11434 if needed
-        streaming=config.streaming,
-        timeout=config.timeout,
+        base_url=config.base_url,
     )
 
     return model

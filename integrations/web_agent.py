@@ -39,7 +39,8 @@ from dataclasses import dataclass, field
 from urllib.parse import urlparse
 from pathlib import Path
 import requests
-from requests.adapters import HTTPAdapter, Retry
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 
 
 @dataclass

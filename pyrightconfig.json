@@ -1,0 +1,5 @@
+{
+  "venvPath": ".",
+  "venv": ".venv",
+  "extraPaths": ["/home/tbaltzakis/Deep agents/deepagents/libs/deepagents"]
+}

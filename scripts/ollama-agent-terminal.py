@@ -221,7 +221,8 @@ def main() -> None:
     if interactive_mode:
         run_interactive(agent, args.model, args.project_path)
     else:
-        run_one_shot(agent, args.prompt)
+        prompt = args.prompt if isinstance(args.prompt, str) else ""
+        run_one_shot(agent, prompt)
 
 
 if __name__ == "__main__":

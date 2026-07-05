@@ -244,7 +244,8 @@ Please execute the task using this mode's responsibilities."""
             full_prompt += f"\n\nContext:\n{json.dumps(context, indent=2)}"
         
         response = self.llm.invoke(full_prompt)
-        return response.content
+        content = response.content if isinstance(response.content, str) else ""
+        return content
     
     def switch_mode(self, new_mode: str) -> bool:
         """Switch to a new agent mode."""

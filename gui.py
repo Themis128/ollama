@@ -54,10 +54,12 @@ try:
 
     init()
     HAS_COLOR = True
+    _ColorFore = Fore  # type: ignore
+    _ColorStyle = Style  # type: ignore
 except ImportError:
     HAS_COLOR = False
     # Fallback colors
-    class Fore:
+    class _ColorFore:
         RED: str = '\033[91m'
         GREEN: str = '\033[92m'
         YELLOW: str = '\033[93m'
@@ -67,10 +69,19 @@ except ImportError:
         WHITE: str = '\033[97m'
         RESET: str = '\033[0m'
     
-    class Style:
+    class _ColorStyle:
         BRIGHT: str = '\033[1m'
         DIM: str = '\033[2m'
         RESET_ALL: str = '\033[0m'
+    
+    # Type aliases
+    Fore = _ColorFore  # type: ignore
+    Style = _ColorStyle  # type: ignore
+
+# Silence type checker warnings about colorama internal types
+if not HAS_COLOR:
+    Fore = Fore  # type: ignore
+    Style = Style  # type: ignore
 
 
 class AgentGUI:
@@ -196,7 +207,8 @@ class AgentGUI:
             spinner = ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏']
             spinner_idx = 0
             
-            for line in process.stdout:
+            stdout_lines = process.stdout or []
+            for line in stdout_lines:
                 print(f"  {Fore.YELLOW}{spinner[spinner_idx % len(spinner)]}{Style.RESET_ALL} {line.strip()}")
                 spinner_idx += 1
                 time.sleep(0.1)
