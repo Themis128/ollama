@@ -33,31 +33,38 @@ echo "$SAVE_OUTPUT"
 
 PATCH_FILE=""
 
-if [ "$SAVE_EXIT" -eq 0 ]; then
-  PATCH_FILE="$(echo "$SAVE_OUTPUT" | awk '/Saved patch:/ {print $3}' | tail -n1)"
+if [ "$SAVE_EXIT" -ne 0 ]; then
+  echo
+  echo "==> Decision"
+  echo "No patch was saved. Do NOT apply anything."
+  echo "Reason: save script refused the patch or no safe patch exists."
+  echo
+  echo "Ollama review skipped because there is no validated patch to review."
+  exit 0
+fi
+
+PATCH_FILE="$(echo "$SAVE_OUTPUT" | awk '/Saved patch:/ {print $3}' | tail -n1)"
+
+if [ -z "$PATCH_FILE" ]; then
+  echo
+  echo "Save script succeeded but no patch path was detected. Do NOT apply automatically."
+  exit 1
+fi
+
+if [ ! -f "$PATCH_FILE" ]; then
+  echo
+  echo "Detected patch path does not exist: $PATCH_FILE"
+  exit 1
 fi
 
 echo
 echo "==> Step 3: Running local Ollama second reviewer..."
 cd /home/tbaltzakis/ollama
-
 OLLAMA_MODEL="$OLLAMA_MODEL" scripts/cloudless-review-last.sh
 
 echo
 echo "==> Step 4: Decision helper"
-
-if [ "$SAVE_EXIT" -ne 0 ]; then
-  echo "No patch was saved. Do NOT apply anything."
-  echo "Reason: save script refused the patch or no safe patch exists."
-  exit 0
-fi
-
-if [ -z "$PATCH_FILE" ]; then
-  echo "Save script succeeded but no patch path was detected. Do NOT apply automatically."
-  exit 1
-fi
-
-echo "A patch was saved:"
+echo "A validated patch was saved:"
 echo "  $PATCH_FILE"
 echo
 echo "Manual apply flow:"
@@ -66,4 +73,6 @@ echo "  git apply --check $PATCH_FILE"
 echo "  git apply $PATCH_FILE"
 echo "  pnpm run cf:typecheck"
 echo
-echo "Apply only if YOU agree with the Cloudflare result and Ollama review."
+echo "Apply only if YOU agree with both:"
+echo "  1. Cloudflare structured patch"
+echo "  2. Local Ollama review"
