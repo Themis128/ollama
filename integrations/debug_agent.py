@@ -24,6 +24,7 @@ Usage:
 """
 
 import re
+import subprocess
 from typing import Optional, Dict, Any, List
 from dataclasses import dataclass
 from pathlib import Path
@@ -40,6 +41,7 @@ class DebugConfig:
     project_path: str = "/home/tbaltzakis/cloudless.gr"
     temperature: float = 0.1
     max_analysis_lines: int = 1000
+    timeout: int = 120
 
 
 class DebugAgent:
@@ -47,6 +49,11 @@ class DebugAgent:
     
     def __init__(self, config: Optional[DebugConfig] = None):
         self.config = config or DebugConfig()
+        self.llm = ChatOllama(
+            model=self.config.model,
+            temperature=self.config.temperature,
+            base_url=self.config.base_url,
+        )
         self.analysis_history: List[Dict[str, Any]] = []
         
     def analyze_error(
@@ -321,24 +328,42 @@ Fix the implementation to resolve the error. Return ONLY the corrected code."""
         fix = self.generate_fix(error_output, file_path)
         result["fix_generated"] = fix
         
-        # Apply fix (in real implementation, write to file)
-        # result["fix_applied"] = True
+        # Apply fix by writing to file
+        try:
+            path = Path(file_path)
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(fix)
+            result["fix_applied"] = True
+        except Exception as e:
+            result["error"] = f"{result["error"]}\nFailed to apply fix: {e}"
+            return result
         
         # Test the fix
-        # if result["fix_applied"]:
-        #     # Run test_command and check if it passes
-        #     pass
+        try:
+            test_result = subprocess.run(
+                test_command,
+                shell=True,
+                capture_output=True,
+                text=True,
+                cwd=self.config.project_path,
+                timeout=self.config.timeout,
+            )
+            result["test_passed"] = test_result.returncode == 0
+            result["test_output"] = {
+                "stdout": test_result.stdout,
+                "stderr": test_result.stderr,
+                "exit_code": test_result.returncode,
+            }
+        except Exception as e:
+            result["test_passed"] = False
+            result["test_output"] = {"error": str(e)}
         
+        result["success"] = result["fix_applied"] and result["test_passed"]
         return result
     
     def _invoke_llm(self, prompt: str) -> str:
         """Invoke LLM with prompt."""
-        llm = ChatOllama(
-            model=self.config.model,
-            temperature=self.config.temperature,
-            base_url=self.config.base_url,
-        )
-        response = llm.invoke(prompt)
+        response = self.llm.invoke(prompt)
         content = response.content if isinstance(response.content, str) else ""
         return content
     

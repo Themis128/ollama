@@ -70,24 +70,28 @@ if [ -n "${PROMPT_INPUT}" ] && [ "${INTERACTIVE}" = true ]; then
     exit 1
 fi
 
+export _OLLAMA_MODEL="${MODEL}"
+export _OLLAMA_BASE_URL="${BASE_URL}"
+export _OLLAMA_PROJECT_PATH="${PROJECT_PATH}"
 run_prompt() {
     local prompt="$1"
     if [ -z "${prompt}" ]; then
         return 0
     fi
 
-    python - <<PY
-import json
+    python - "${prompt}" <<'PY'
+import sys, json
 from integrations import create_cloudflare_agent
+import os
 
 agent = create_cloudflare_agent(
-    model="${MODEL}",
-    base_url="${BASE_URL}",
-    project_path="${PROJECT_PATH}",
+    model=os.environ["_OLLAMA_MODEL"],
+    base_url=os.environ["_OLLAMA_BASE_URL"],
+    project_path=os.environ["_OLLAMA_PROJECT_PATH"],
     enable_cloudflare_mcp=False,
 )
 
-result = agent.invoke({"messages": ${prompt@Q}})
+result = agent.invoke({"messages": sys.argv[1]})
 output = result.get("messages", result)
 if isinstance(output, list):
     for msg in output:

@@ -100,6 +100,8 @@ def create_cloudless_agent(
     temperature: float = 0.1,
     max_tokens: int = 4096,
     skills: Optional[List[str]] = None,
+    enable_cloudflare_mcp: bool = False,
+    mcp_config_path: str = ".deepagents/.mcp.json",
 ) -> Any:
     """
     Create a DeepAgent for cloudless.gr with skills.
@@ -129,6 +131,9 @@ def create_cloudless_agent(
     # Load skills from project if not provided
     if skills is None:
         skills = get_cloudless_skills()
+
+    if enable_cloudflare_mcp:
+        write_cloudflare_mcp_config(mcp_config_path)
 
     # Default coding-focused system prompt with cloudless.gr context
     default_coding_prompt = f"""You are an expert software developer and coding assistant for cloudless.gr.

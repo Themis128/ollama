@@ -48,6 +48,10 @@ scripts/.project_env
 .deepagents/
 *.deepagents
 
+# Cline
+.cline/
+.clineignore
+
 # Test coverage
 htmlcov/
 .tox/

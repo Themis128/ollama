@@ -38,6 +38,7 @@ from typing import Optional, Dict, Any, List
 from dataclasses import dataclass, field
 from urllib.parse import urlparse
 from pathlib import Path
+import logging
 import requests  # type: ignore
 from requests.adapters import HTTPAdapter  # type: ignore
 from urllib3.util.retry import Retry  # type: ignore
@@ -106,22 +107,21 @@ class WebAgent:
         self.request_count += 1
         
     def _is_safe_url(self, url: str) -> bool:
-        """Check if URL is from a safe domain."""
+        """Check if URL is safe (http/https only, no private/loopback addresses)."""
         parsed = urlparse(url)
-        domain = parsed.netloc.lower()
-        
-        # Always allow relative URLs
-        if not parsed.scheme or not domain:
-            return True
-            
-        # Allow if domain matches safe domains
-        for safe_domain in self.config.safe_domains:
-            if safe_domain.lower().strip() in domain:
-                return True
-        
-        # Default to safe for common protocols (http/https) but only for known domains
-        # This is a safety measure - in production, you'd want stricter control
-        return False
+
+        # Only allow http/https
+        if parsed.scheme not in ("http", "https"):
+            return False
+
+        domain = parsed.netloc.lower().split(":")[0]
+
+        # Block loopback and private ranges (basic check)
+        blocked_prefixes = ("localhost", "127.", "0.", "10.", "192.168.", "169.254.")
+        if any(domain.startswith(p) for p in blocked_prefixes):
+            return False
+
+        return bool(domain)
     
     def _get_cache_key(self, url: str) -> str:
         """Generate cache key for URL."""
@@ -194,7 +194,7 @@ class WebAgent:
                     if results:
                         return results
             except Exception:
-                pass
+                logging.debug("Kiro CLI web-search failed", exc_info=True)
         
         # Try Bing Web Search API (if API key available)
         bing_key = os.environ.get("BING_API_KEY")
@@ -222,7 +222,7 @@ class WebAgent:
                     ]
                     return results
             except Exception:
-                pass
+                logging.debug("Bing web search failed", exc_info=True)
         
         # Try Google Custom Search API (if API key available)
         gsearch_key = os.environ.get("GOOGLE_API_KEY")
@@ -252,7 +252,7 @@ class WebAgent:
                     ]
                     return results
             except Exception:
-                pass
+                logging.debug("Google Custom Search failed", exc_info=True)
         
         # Fallback: Try DuckDuckGo Instant Answer API
         search_url = "https://api.duckduckgo.com/"
@@ -290,7 +290,7 @@ class WebAgent:
                             "source": "duckduckgo",
                         })
         except Exception:
-            pass
+            logging.debug("DuckDuckGo search failed", exc_info=True)
         
         # If all else fails, return placeholder results
         if not results:

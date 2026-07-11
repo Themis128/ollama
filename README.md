@@ -41,6 +41,12 @@ A robust coding agent system integrating DeepAgents SDK with Ollama, featuring p
 - ✅ **Sandbox Isolation** - Secure execution environment
 - ✅ **Rate Limiting** - Responsible API usage
 
+### Cline-Compatible Integration
+- ✅ **NLPProcessor** - Intent classification with confidence scoring
+- ✅ **ClineAdapter** - 7 standard tools for file operations and LLM interaction
+- ✅ **Structured Tool Responses** - JSON format for easy integration
+- ✅ **Multi-Project Support** - Works with any project via `PROJECT_PATH`
+
 ## Quick Start
 
 ```bash
@@ -62,6 +68,48 @@ ollama serve
 # Or start the terminal GUI
 python3 gui.py
 ```
+
+### Cline-Compatible Integration
+
+The NLPProcessor and ClineAdapter provide robust, structured command parsing for Cline-like applications:
+
+```python
+# Python integration
+from integrations import ClineAdapter, NLPProcessor
+
+# Use ClineAdapter for tool operations
+adapter = ClineAdapter(project_path="/home/tbaltzakis/cloudless.gr")
+result = adapter.run_tool("list_files", {"max_depth": 2})
+
+# Use NLPProcessor for intent recognition
+nlp = NLPProcessor()
+intent = nlp.parse("analyze the codebase quality")
+# Returns: ParsedIntent with confidence score and action
+
+# Direct tool usage
+result = adapter.run_tool("ask_agent", {"prompt": "Explain the auth system"})
+```
+
+```bash
+# CLI integration
+python -m integrations.cline_adapter --tool ask_agent --params '{"prompt": "Analyze this project"}'
+
+# Test the NLP processor
+python scripts/test-nlp-processor.py
+```
+
+### ClineAdapter Tools
+
+| Tool | Description |
+|------|-------------|
+| `list_files` | List project files with max_depth filter |
+| `read_file` | Read file content by path |
+| `write_file` | Write content to a file |
+| `run_command` | Execute terminal commands |
+| `ask_agent` | Query Ollama LLM |
+| `list_models` | List available Ollama models |
+| `pull_model` | Download a new model |
+| `check_ollama` | Check server status |
 
 ## Terminal-Separated Agent Execution
 
@@ -197,6 +245,30 @@ Use the interactive project picker to select your working directory:
 | `project-picker.sh` | Interactive project selection |
 | `ollama-agent.sh` | CLI agent with one-shot or interactive mode |
 | `ollama-agent-terminal.py` | Terminal-separated agent helper |
+
+## MCP Server
+
+`mcp_server/coding_agent.py` exposes 5 MCP tools for use with Cline or any MCP-compatible client:
+
+| Tool | Purpose |
+|------|---------|
+| `cf_agent_status` | Check Cloudflare CodingAgent state |
+| `cf_agent_run` | Send task + repo context to CF CodingAgent |
+| `cf_agent_review_with_ollama` | Review latest CF result with local Ollama |
+| `cf_agent_full_loop` | Run + review in one call |
+| `cf_agent_apply_patch` | Apply last structured patch to repo |
+
+Config via env or `~/.config/cloudless-coding-agent.env`:
+- `CLOUDLESS_DIR` — path to cloudless.gr repo
+- `CLOUDLESS_AGENT_URL` — CF Worker URL
+- `OLLAMA_BASE_URL` — Ollama OpenAI-compat base (default: `http://localhost:11434/v1`)
+- `OLLAMA_MODEL` — model for local review (default: `qwen2.5-coder:latest`)
+- `AGENT_AUTH_TOKEN` — auth token (read from `CLOUDLESS_DIR/.env.local` if not set)
+
+Run standalone:
+```bash
+python3 mcp_server/coding_agent.py
+```
 
 ## Documentation
 

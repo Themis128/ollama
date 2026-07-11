@@ -26,6 +26,7 @@ Usage:
 """
 
 import subprocess
+import logging
 from typing import Optional, Dict, Any, List
 from dataclasses import dataclass
 from pathlib import Path
@@ -273,8 +274,8 @@ Fix the implementation to make tests pass:
         for f in files:
             try:
                 Path(f).write_text("")
-            except Exception:
-                pass
+            except Exception as e:
+                logging.debug("Failed to reset file", exc_info=True)
 
 
 # CLI Interface

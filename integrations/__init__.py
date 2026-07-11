@@ -56,18 +56,16 @@ from .orchestrator_agent import Orchestrator
 from .web_agent import WebAgent
 from .debug_agent import DebugAgent
 from .agent_storm import AgentStorm, AgentRole
+from .cline_adapter import ClineAdapter
+from .nlp_processor import NLPProcessor, ParsedIntent, Intent
 
 from .cloudless_gr_integration import (
     create_cloudless_agent,
+    create_cloudflare_agent,
     get_cloudflare_skills,
     get_cloudflare_mcp_servers,
     write_cloudflare_mcp_config,
 )
-
-# Create cloudflare agent as a wrapper
-def create_cloudflare_agent(*args, **kwargs):
-    """Create a DeepAgent with Cloudflare skills/MCP enabled."""
-    return create_cloudless_agent(*args, **kwargs)
 
 __all__ = [
     "create_ollama_agent",
@@ -83,4 +81,8 @@ __all__ = [
     "DebugAgent",
     "AgentStorm",
     "AgentRole",
+    "ClineAdapter",
+    "NLPProcessor",
+    "ParsedIntent",
+    "Intent",
 ]

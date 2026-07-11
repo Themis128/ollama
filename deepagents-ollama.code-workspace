@@ -1,0 +1,37 @@
+{
+  "folders": [
+    {
+      "name": "ollama",
+      "path": "."
+    },
+    {
+      "name": "cloudless.gr",
+      "path": "../cloudless.gr"
+    },
+    {
+      "name": "appflowy",
+      "path": "../appflowy"
+    }
+  ],
+  "settings": {
+    "python.defaultInterpreterPath": "./.venv/bin/python",
+    "python.terminal.activateEnvironment": true,
+    "files.exclude": {
+      "**/__pycache__": true,
+      "**/*.pyc": true,
+      "**/.venv": true,
+      "**/.mypy_cache": true
+    },
+    "search.exclude": {
+      "**/node_modules": true,
+      "**/__pycache__": true,
+      "**/.venv": true
+    }
+  },
+  "extensions": {
+    "recommendations": [
+      "ms-python.python",
+      "ms-python.vscode-pylance"
+    ]
+  }
+}

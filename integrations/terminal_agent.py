@@ -51,6 +51,7 @@ class TerminalConfig:
     ])
     timeout: int = 120
     max_retries: int = 3
+    llm: Optional[Any] = None
 
 
 class TerminalAgent:
@@ -61,6 +62,7 @@ class TerminalAgent:
         self.execution_history: List[Dict[str, Any]] = []
         self.stdout_history: List[str] = []
         self.stderr_history: List[str] = []
+        self.llm = self.config.llm
         
     def execute(self, command: str, cwd: Optional[str] = None) -> Dict[str, Any]:
         """
@@ -289,11 +291,20 @@ Fix the implementation to resolve these errors:
             if "location" in first_error:
                 fix_prompt += f"\n\nERROR LOCATION: {first_error['location']}"
         
-        # Call LLM for fix (this would require access to LLM)
-        # For now, return a template response
-        return f"""// TODO: Implement fix for error
-// Error type: {error_type}
-// Error output: {error_output[:200]}..."""
+        # Use LLM if available
+        if self.llm is not None:
+            try:
+                response = self.llm.invoke(fix_prompt)
+                fix = response.content if isinstance(response.content, str) else str(response)
+                return fix.strip()
+            except Exception as e:
+                return f"Failed to generate fix via LLM: {e}"
+        
+        # Fallback: return structured error summary for manual fixing
+        return f"""# Error Analysis
+# Type: {error_type}
+# Parsed: {parsed}\n#\n# Raw output (truncated):
+# {error_output[:500]}..."""
     
     def get_history(self, limit: int = 10) -> List[Dict[str, Any]]:
         """Get execution history."""

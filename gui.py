@@ -642,6 +642,7 @@ class AgentGUI:
         if action == 'scan_projects':
             print(f"\n{Fore.CYAN}Scanning for projects...{Style.RESET_ALL}")
             home = Path.home()
+            projects_set = set()
             projects = []
             
             # Scan common locations
