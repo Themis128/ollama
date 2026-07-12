@@ -56,6 +56,14 @@ from .orchestrator_agent import Orchestrator
 from .web_agent import WebAgent
 from .debug_agent import DebugAgent
 from .agent_storm import AgentStorm, AgentRole
+from .custom_tools import (
+    create_tool,
+    Tool,
+    ToolRegistry,
+    ToolResult,
+    AgentToolContext,
+    get_default_registry,
+)
 from .cline_adapter import ClineAdapter
 from .nlp_processor import NLPProcessor, ParsedIntent, Intent
 
@@ -68,6 +76,14 @@ from .cloudless_gr_integration import (
 )
 
 __all__ = [
+    # Custom tools
+    "create_tool",
+    "Tool",
+    "ToolRegistry",
+    "ToolResult",
+    "AgentToolContext",
+    "get_default_registry",
+    # Existing exports
     "create_ollama_agent",
     "create_cloudless_agent",
     "get_cloudflare_skills",

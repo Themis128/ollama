@@ -1,16 +1,426 @@
 # API Reference
 
-Complete API documentation for all agent modules.
+Complete API documentation for all modules in the DeepAgents + Ollama integration.
 
 ## Table of Contents
 
-1. [TDDAgent](#tddagent)
-2. [TerminalAgent](#terminalagent)
-3. [SandboxAgent](#sandboxagent)
-4. [Orchestrator](#orchestrator)
-5. [WebAgent](#webagent)
-6. [DebugAgent](#debugagent)
-7. [AgentStorm](#agentstorm)
+1. [DeepAgents + Ollama Base](#deepagents--ollama-base)
+2. [ClineAdapter](#clineadapter)
+3. [NLPProcessor](#nlpprocessor)
+4. [TDDAgent](#tddagent)
+5. [TerminalAgent](#terminalagent)
+6. [SandboxAgent](#sandboxagent)
+7. [Orchestrator](#orchestrator)
+8. [WebAgent](#webagent)
+9. [DebugAgent](#debugagent)
+10. [AgentStorm](#agentstorm)
+11. [Custom Tools](#custom-tools)
+12. [Error Handling](#error-handling)
+
+---
+
+## DeepAgents + Ollama Base
+
+Base integration module providing the foundation for all Ollama-powered agents.
+
+### Module
+
+```python
+from integrations.deepagents_ollama import (
+    create_ollama_agent,
+    create_ollama_agent_with_tools,
+    OllamaConfig,
+    register_ollama_provider,
+    get_ollama_model,
+    list_available_models,
+    pull_model,
+)
+```
+
+### Configuration
+
+```python
+@dataclass
+class OllamaConfig:
+    base_url: str = "http://localhost:11434"
+    model: str = "qwen2.5-coder"
+    temperature: float = 0.1  # Lower for coding tasks
+    max_tokens: int = 4096
+    top_p: float = 0.95
+    streaming: bool = True
+    timeout: int = 120
+    api_key: str = "dummy"  # Not required for local Ollama
+```
+
+### Functions
+
+#### create_ollama_agent
+
+Create a DeepAgent powered by Ollama.
+
+```python
+def create_ollama_agent(
+    model: str = "qwen2.5-coder",
+    base_url: str = "http://localhost:11434",
+    api_key: str = "dummy",
+    system_prompt: Optional[str] = None,
+    tools: Optional[List[Any]] = None,
+    middleware: Optional[List[Any]] = None,
+    temperature: float = 0.1,
+    max_tokens: int = 4096,
+    timeout: int = 120,
+) -> Any
+```
+
+**Parameters:**
+- `model` (str): Ollama model name (qwen2.5-coder, llama3.1, mistral, etc.)
+- `base_url` (str): Ollama server URL
+- `api_key` (str): API key (dummy for local Ollama)
+- `system_prompt` (Optional[str]): Custom system prompt
+- `tools` (Optional[List[Any]]): Optional list of custom tools
+- `middleware` (Optional[List[Any]]): Optional middleware list
+- `temperature` (float): Generation temperature (lower = more precise)
+- `max_tokens` (int): Maximum output tokens
+- `timeout` (int): Request timeout in seconds
+
+**Returns:**
+- `Any`: Configured DeepAgent instance
+
+**Example:**
+```python
+from integrations import create_ollama_agent
+
+agent = create_ollama_agent(
+    model="qwen2.5-coder",
+    base_url="http://localhost:11434",
+    system_prompt="You are an expert Python developer...",
+)
+
+result = agent.invoke({"messages": "Create a REST API with FastAPI"})
+```
+
+#### register_ollama_provider
+
+Register Ollama as a DeepAgents provider.
+
+```python
+def register_ollama_provider(
+    base_url: str = "http://localhost:11434",
+    api_key: str = "dummy",
+    model: str = "qwen2.5-coder",
+) -> None
+```
+
+**Parameters:**
+- `base_url` (str): Ollama server URL
+- `api_key` (str): API key (dummy works for local Ollama)
+- `model` (str): Model identifier
+
+**Example:**
+```python
+from integrations.deepagents_ollama import register_ollama_provider
+
+register_ollama_provider(
+    base_url="http://localhost:11434",
+    model="qwen2.5-coder",
+)
+# Now you can use: ollama:qwen2.5-coder as model string
+```
+
+#### list_available_models
+
+List all available models in Ollama.
+
+```python
+def list_available_models(base_url: str = "http://localhost:11434") -> List[Dict[str, Any]]
+```
+
+**Returns:**
+```python
+[
+    {"name": "qwen2.5-coder:latest", "size": 123456789, ...},
+    {"name": "llama3.1:latest", "size": 987654321, ...},
+    ...
+]
+```
+
+#### pull_model
+
+Pull a model from Ollama registry.
+
+```python
+def pull_model(model: str = "qwen2.5-coder", base_url: str = "http://localhost:11434") -> bool
+```
+
+**Returns:**
+- `bool`: True if successful
+
+---
+
+## ClineAdapter
+
+Cline-compatible tool interface for DeepAgents + Ollama integration.
+
+### Module
+
+```python
+from integrations.cline_adapter import ClineAdapter
+```
+
+### Constructor
+
+```python
+ClineAdapter(project_path: Optional[str] = None)
+```
+
+**Parameters:**
+- `project_path` (Optional[str]): Project path for context (uses PROJECT_PATH env or cwd)
+
+### Default Tools
+
+The ClineAdapter provides 11 tools by default:
+
+| Tool | Description |
+|------|-------------|
+| `list_files` | List files in a directory with max_depth filter |
+| `read_file` | Read file content by path |
+| `write_file` | Write content to a file |
+| `run_command` | Execute terminal commands |
+| `ask_agent` | Query Ollama LLM |
+| `list_models` | List available Ollama models |
+| `pull_model` | Download a new model |
+| `check_ollama` | Check server status |
+| `search_files` | Search for files matching a pattern |
+| `get_file_info` | Get detailed file information |
+| `analyze_code` | Analyze code structure and quality |
+| `generate_test` | Generate test scaffolding for a file |
+
+### Methods
+
+#### run_tool
+
+Execute a tool and return Cline-compatible response.
+
+```python
+def run_tool(self, tool_name: str, params: Dict[str, Any]) -> Dict[str, Any]
+```
+
+**Parameters:**
+- `tool_name` (str): Name of the tool to execute
+- `params` (Dict[str, Any]): Parameters for the tool
+
+**Returns:**
+```python
+# Success response
+{
+    "success": True,
+    # ... tool-specific fields
+}
+
+# Error response
+{
+    "success": False,
+    "error": str,
+    "available_tools": List[str],  # Only on unknown tool error
+}
+```
+
+**Example:**
+```python
+from integrations import ClineAdapter
+
+adapter = ClineAdapter(project_path="/home/tbaltzakis/my-project")
+
+# List files
+result = adapter.run_tool("list_files", {"max_depth": 2})
+
+# Read a file
+result = adapter.run_tool("read_file", {"path": "src/app.py"})
+
+# Write a file
+result = adapter.run_tool("write_file", {
+    "path": "src/output.py",
+    "content": "print('Hello, World!')"
+})
+
+# Run a command
+result = adapter.run_tool("run_command", {
+    "command": "ls -la",
+    "cwd": "/home/tbaltzakis/my-project"
+})
+```
+
+---
+
+## NLPProcessor
+
+Natural language command parsing with confidence scoring.
+
+### Module
+
+```python
+from integrations.nlp_processor import NLPProcessor, ParsedIntent, Intent
+```
+
+### Enum
+
+```python
+class Intent(Enum):
+    ANALYZE = "analyze"
+    CODE = "code"
+    TEST = "test"
+    RESEARCH = "research"
+    OLLAMA = "ollama"
+    PROJECT = "project"
+    UNKNOWN = "unknown"
+```
+
+### Dataclass
+
+```python
+@dataclass
+class ParsedIntent:
+    intent: Intent
+    action: str
+    confidence: float
+    parameters: Dict[str, Any]
+    context: Dict[str, Any]
+    requires_confirmation: bool = False
+```
+
+### Constructor
+
+```python
+NLPProcessor()
+```
+
+### Methods
+
+#### parse
+
+Parse natural language command into structured intent.
+
+```python
+def parse(self, command: str, project_context: Optional[str] = None) -> ParsedIntent
+```
+
+**Parameters:**
+- `command` (str): Natural language command
+- `project_context` (Optional[str]): Project path for context
+
+**Returns:**
+- `ParsedIntent`: Structured intent with confidence scores
+
+**Example:**
+```python
+from integrations import NLPProcessor
+
+nlp = NLPProcessor()
+
+intent = nlp.parse("analyze codebase for issues")
+
+print(f"Intent: {intent.intent}")
+print(f"Action: {intent.action}")
+print(f"Confidence: {intent.confidence}")
+print(f"Parameters: {intent.parameters}")
+```
+
+---
+
+## Custom Tools
+
+Tool registry framework for creating and managing custom agent tools.
+
+### Module
+
+```python
+from integrations.custom_tools import (
+    create_tool,
+    Tool,
+    ToolRegistry,
+    ToolResult,
+    AgentToolContext,
+    get_default_registry,
+)
+```
+
+### Functions
+
+#### create_tool
+
+Create a custom tool function.
+
+```python
+def create_tool(
+    func: Callable,
+    name: Optional[str] = None,
+    description: Optional[str] = None,
+    parameters: Optional[Dict[str, Any]] = None,
+) -> Tool
+```
+
+**Example:**
+```python
+from integrations import create_tool
+
+def my_custom_tool(input: str) -> str:
+    """Process input and return result."""
+    return f"Processed: {input}"
+
+tool = create_tool(
+    my_custom_tool,
+    name="process_text",
+    description="Process text with custom logic",
+)
+```
+
+#### get_default_registry
+
+Get the default tool registry.
+
+```python
+def get_default_registry() -> ToolRegistry
+```
+
+### Classes
+
+#### Tool
+
+Represents a tool with metadata.
+
+```python
+@dataclass
+class Tool:
+    name: str
+    description: str
+    func: Callable
+    parameters: Dict[str, Any]
+```
+
+#### ToolRegistry
+
+Registry for managing tools.
+
+```python
+class ToolRegistry:
+    def register(self, tool: Tool) -> None
+    def unregister(self, name: str) -> None
+    def get(self, name: str) -> Optional[Tool]
+    def list_tools(self) -> List[str]
+    def execute(self, name: str, **kwargs) -> ToolResult
+```
+
+#### ToolResult
+
+Result of tool execution.
+
+```python
+@dataclass
+class ToolResult:
+    success: bool
+    result: Any = None
+    error: Optional[str] = None
+```
 
 ---
 

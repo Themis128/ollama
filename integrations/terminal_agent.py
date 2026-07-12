@@ -267,9 +267,6 @@ class TerminalAgent:
         """
         parsed = self.parse_output(error_output, error_type)
         
-        if not parsed["has_errors"]:
-            return "No errors to fix."
-        
         # Build fix prompt
         fix_prompt = f"""Fix the following error in the codebase.
 
