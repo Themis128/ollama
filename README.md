@@ -367,6 +367,37 @@ If you point agents at another repo, keep the same `.deepagents/skills/` and
 - Sandbox isolation optional
 - Rate limiting for web requests
 
+## External Resources & Tools
+
+### GitHub MCP Tools (26 functions)
+Access GitHub repositories, PRs, issues, and code search via MCP. Functions are prefixed `cz_VTX0mcp0`:
+
+- **Repository**: create_repository, fork_repository, get/crate/update/delete files
+- **PR/Git**: create_branch, create_pull_request, merge_pull_request, get_pr_diff/files/commits
+- **Issues**: create_issue, update_issue, add_issue_comment, add_sub_issue
+- **Search**: search_repositories, search_code, search_commits, search_issues
+- **Advanced**: request_copilot_review, assign_copilot_to_issue, get_me
+
+### Specialized Skills (27 skills via `use_skill()`)
+Load with `use_skill("skill-name")` for Azure/Cloudflare/Other platforms:
+
+| Category | Skills |
+|----------|--------|
+| **Azure (17)** | azure-aigateway, azure-compute, azure-kubernetes, azure-storage, azure-ai, azure-deploy, azure-prepare, azure-validate, azure-diagnostics, azure-cost, azure-compliance, azure-kusto, azure-messaging, azure-rbac, azure-reliability, azure-upgrade, azure-enterprise-infra-planner |
+| **Cloudflare (9)** | cloudflare, cloudflare-email-service, cloudflare-one, durable-objects, sandbox-sdk, turnstile-spin, web-perf, workers-best-practices, wrangler |
+| **Other (4)** | playwright-cli, entra-agent-id, entra-app-registration, appinsights-instrumentation |
+
+### Cloudflare MCP Servers (5 remote endpoints)
+```json
+{
+  "mcp.cloudflare.com/mcp": "General Cloudflare API",
+  "docs.mcp.cloudflare.com/mcp": "Documentation access",
+  "bindings.mcp.cloudflare.com/mcp": "Workers bindings",
+  "builds.mcp.cloudflare.com/mcp": "Deploy/build operations",
+  "observability.mcp.cloudflare.com/mcp": "Monitoring/metrics"
+}
+```
+
 ## Next Steps
 
 1. Start Ollama: `ollama serve`
