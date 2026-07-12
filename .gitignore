@@ -52,6 +52,12 @@ scripts/.project_env
 .cline/
 .clineignore
 
+# Claude
+.claude/
+
+# Playwright CLI skills
+.playwright-cli/
+
 # Test coverage
 htmlcov/
 .tox/
